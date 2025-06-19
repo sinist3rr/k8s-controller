@@ -8,6 +8,7 @@
 *.so
 *.dylib
 controller
+k8s-controller
 
 # Test binary, built with `go test -c`
 *.test
