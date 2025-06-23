@@ -96,4 +96,52 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: helm-chart
-          path: chart-artifacts/ 
+          path: chart-artifacts/
+
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/')
+    permissions:
+      contents: write
+    defaults:
+      run:
+        working-directory: ./k8s-controller
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.24.2'
+      - name: Extract version
+        id: version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+      - name: Build release binaries
+        run: |
+          mkdir -p release
+          VERSION="${{ steps.version.outputs.VERSION }}"
+          for os in linux darwin windows; do
+            for arch in amd64 arm64; do
+              [ "$os" = "windows" ] && ext='.exe' || ext=''
+              [ "$os" = "windows" -a "$arch" = "arm64" ] && continue
+              GOOS=$os GOARCH=$arch go build \
+                -ldflags "-s -w -X main.version=$VERSION" \
+                -o release/${{ env.BINARY_NAME }}-${os}-${arch}${ext} \
+                main.go
+            done
+          done
+          (cd release && sha256sum * > checksums.txt)
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            release/*
+            chart-artifacts/app-${{ steps.version.outputs.VERSION }}.tgz
+          body: |
+            ## k8s-controller ${{ steps.version.outputs.VERSION }}
+            - Cross-compiled binaries for Linux, macOS, Windows  
+            - Checksums  
+            - Helm chart version ${{ steps.version.outputs.VERSION }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
