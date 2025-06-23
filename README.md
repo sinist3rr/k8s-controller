@@ -1,4 +1,11 @@
-# /deployments JSON API Endpoint
+# k8s-controller
+
+[![Overall CI/CD] (https://github.com/sinist3rr/k8s-controller/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/sinist3rr/k8s-controller/actions/workflows/ci.yml)
+[![Go Version](https://img.shields.io/badge/Go-1.21-blue)](https://golang.org/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
+
+## /deployments JSON API Endpoint
 
 - Added a `/deployments` endpoint to the FastHTTP server.
 - Returns a JSON array of deployment names from the informer's cache (default namespace).
