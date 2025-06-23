@@ -1,9 +1,8 @@
 # k8s-controller
 
-[![Overall CI/CD](https://github.com/sinist3rr/k8s-controller/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/sinist3rr/k8s-controller/actions/workflows/ci.yml)
-[![Go Version](https://img.shields.io/badge/Go-1.21-blue)](https://golang.org/)
+[![Overall CI/CD](https://github.com/sinist3rr/k8s-controller/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/sinist3rr/k8s-controller/actions/workflows/ci.yaml)
+[![Go Version](https://img.shields.io/badge/Go-1.24-blue)](https://golang.org/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-
 
 ## /deployments JSON API Endpoint
 
