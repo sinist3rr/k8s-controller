@@ -36,15 +36,11 @@ jobs:
         with:
           go-version: '1.24.2'
 
-      - name: Install envtest binaries
+      - name: Prepare envtest via Makefile
         run: |
-          go install sigs.k8s.io/controller-runtime/tools/setup-envtest@latest
-          setup-envtest use 1.27.6 --bin-dir ./testbin
-        env:
-          GOBIN: ${{ runner.tool_cache }}/go/bin
-
-      - name: Add test binaries to PATH
-        run: echo "${{ runner.tool_cache }}/go/bin:$(pwd)/testbin" >> $GITHUB_PATH
+          make envtest
+          # Ensure ./bin (and its subdirs) are on PATH
+          echo "${{ github.workspace }}/bin:$(pwd)/bin/k8s/*" >> $GITHUB_PATH
 
       - name: Set version
         id: vars
