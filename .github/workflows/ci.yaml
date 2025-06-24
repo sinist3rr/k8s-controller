@@ -121,10 +121,9 @@ jobs:
         run: |
           mkdir -p release
           VERSION="${{ steps.version.outputs.VERSION }}"
-          for os in linux darwin windows; do
+          for os in linux; do
             for arch in amd64 arm64; do
-              [ "$os" = "windows" ] && ext='.exe' || ext=''
-              [ "$os" = "windows" -a "$arch" = "arm64" ] && continue
+              ext=''
               GOOS=$os GOARCH=$arch go build \
                 -ldflags "-s -w -X main.version=$VERSION" \
                 -o release/${{ env.BINARY_NAME }}-${os}-${arch}${ext} \
@@ -140,7 +139,7 @@ jobs:
             chart-artifacts/app-${{ steps.version.outputs.VERSION }}.tgz
           body: |
             ## k8s-controller ${{ steps.version.outputs.VERSION }}
-            - Cross-compiled binaries for Linux, macOS, Windows  
+            - Cross-compiled binaries for Linux
             - Checksums  
             - Helm chart version ${{ steps.version.outputs.VERSION }}
         env:
