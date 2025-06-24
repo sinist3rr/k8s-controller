@@ -106,6 +106,8 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/')
     permissions:
       contents: write
+    env:
+      BINARY_NAME: k8s-controller
     steps:
       - uses: actions/checkout@v4
       - name: Setup Go
@@ -128,7 +130,7 @@ jobs:
                 main.go
             done
           done
-          (cd release && sha256sum * > checksums.txt)
+          (cd release && sha256sum -- * > checksums.txt)
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
