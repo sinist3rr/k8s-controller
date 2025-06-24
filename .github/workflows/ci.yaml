@@ -106,9 +106,6 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/')
     permissions:
       contents: write
-    defaults:
-      run:
-        working-directory: ./k8s-controller
     steps:
       - uses: actions/checkout@v4
       - name: Setup Go
